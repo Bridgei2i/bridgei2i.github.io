@@ -118,39 +118,39 @@ __Sample Program to find no.of results for list of programming languages:__
 public class googleRes {
 	public static void main(String[] args) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
 		
-		#=> Initailzing Webclient Object to imitate chrome browser
+		// Initailzing Webclient Object to imitate chrome browser
 		WebClient webClient = new WebClient(BrowserVersion.CHROME);
 		webClient.getOptions().setJavaScriptEnabled(false);
 		webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
 		webClient.getOptions().setThrowExceptionOnScriptError(false);
 		
-		#=> List of programming language names to find no.of results
+		// List of programming language names to find no.of results
 		String []searchString={"java","javastring","php","c++","c#","visual basic","clojure","simula","ruby","python",
 				"objective-c","matlab"};
 		HtmlPage page = webClient.getPage("https://google.com/");
 	    
-		#=> Getting Form from google home page. tsf is the form name 
+		// Getting Form from google home page. tsf is the form name 
 		HtmlForm form = page.getHtmlElementById("tsf");
 		
-		#=> Iterate programming languages to fond no.of results
+		// Iterate programming languages to fond no.of results
 		for(int j=0;j<searchString.length;j++){
 			
-			#=> Setting programming language name as value in search box in google search home page
+			// Setting programming language name as value in search box in google search home page
 			form.getInputByName("q").setValueAttribute(searchString[j]);
 			
-			#=> Creating a virtual submit button
+			// Creating a virtual submit button
 			HtmlButton submitButton = (HtmlButton)page.createElement("button");
 			submitButton.setAttribute("type", "submit");
 			form.appendChild(submitButton);
 			
-			#=> Submitting the form and getting the result 
+			// Submitting the form and getting the result 
 			HtmlPage newPage = submitButton.click();
 			
-			#=> Getting the result as text
+			// Getting the result as text
 			String pageText=newPage.asText();
 			String results[]=pageText.split("\n");
 			
-			#=> Getting the lines which contains the no.of results value.
+			// Getting the lines which contains the no.of results value.
 			for(int i=0;i<results.length;i++){
 				if(results[i].contains("About") && results[i].contains("results"))
 					System.out.println(searchString[j]+"-----"+results[i]);
@@ -165,7 +165,7 @@ __Result__
 
 ![Alt text](/images/output2.jpg "Result")
 
-Note—Based on the program result chart has been created using excel.
+_Note—Based on the program result chart has been created using excel._
 
 __This blog is written by Saddam Hussain, Business Analyst at__ [BRIDGEi2i](https://www.bridgei2i.com)
 
