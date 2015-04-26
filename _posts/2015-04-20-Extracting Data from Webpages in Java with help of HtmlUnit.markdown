@@ -35,7 +35,80 @@ HtmlUnit is an API for java which can simulate a browser. Using this API with ja
 * Support for basic and NTLM authentication
 * Excellent JavaScript support
 
+# __How To Guide:__
 
+## Step 1:
+* Create a new java project in eclipse
+--> PIC
+
+## Step 2:
+* Download the HtmlUnit API from [HtmlUnit's Source](https://sourceforge.net/projects/htmlunit/files/htmlunit)  
+* Add the HtmlUnit jar files into project’s build path
+-- PIC
+
+## Step 3:
+* Create a java class, Here for example I have created ‘googleRes’ class
+{% highlight java %}
+public class googleRes{
+	pubilc static void main(String []args){
+	
+	}
+}
+{% endhighlight %}
+
+* __Create and initialize an object for WebClient:__ WebClient is root for HtmlUnit which is used to imitate a client browser. It has a parameterised and non-parameterised constructor. Here I have used single parameter constructor to create a new object by passing BrowserVersion.CHROME constant as an argument. By which a new WebClient object has been created to imitate a chrome browser.
+
+{% highlight java %}
+public class googleRes{
+	public static void main(String[] args) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		WebClient webClient = new WebClient(BrowserVersion.CHROME);
+		
+	}
+}
+{% endhighlight %}
+
+* __Create object for page:__ The WebClient class contains a method called getPage() which is used to fetch a webpage, Return type of getPage() method is HtmlPage. So create an object for HtmlPage and assign it by calling webClient.getPage().The getPage() method requires one argument which is the URL of the webpage you want to fetch.
+
+{% highlight java %}
+public class googleRes{
+	public static void main(String[] args) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		WebClient webClient = new WebClient(BrowserVersion.CHROME);
+		HtmlPage page = (HtmlPage) webClient.getPage("http://en.wikipedia.org");
+	}
+}
+{% endhighlight %}
+
+HtmlPage object has been created which contains all the data stored in the webpage which you send as URL argument for getPage() method. Now you can play with the HtmlPage object and you can get whatever content your want from the webpage.
+
+__Handling the JavaScript__
+
+Nowadays all website contains javascript in it. Which is used to process or call background function when some event occurs or to show some dynamic advertisement in the page. So if you don’t have to do anything with the javascript then it’s better to turn it off.
+
+Because in the background the javascript will be executed and if it has some internal function call again that will be executed and this process will keep on going which will reduce the performance of your program and will take lot of time to fetch the websites. The WebClient class offers methods to solve this issue by which you can enable/disable the javascript in the webpage.
+
+{% highlight java %}
+	webClient.getOptions().setJavaScriptEnabled(false);
+{% endhighlight %}
+
+* Getting page contents: HtmlPage class offers two unique methods called asText() & asXml() by which you can get the page’s text content without tag or with tag respectively.
+
+{% highlight java %}
+public class googleRes{
+	public static void main(String[] args) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		WebClient webClient = new WebClient(BrowserVersion.CHROME);
+		webClient.getOptions().setJavaScriptEnabled(false);
+		HtmlPage page = (HtmlPage) webClient.getPage("http://en.wikipedia.org");
+		String pageContent=page.asText();
+		System.out.println(pageContent);
+	}
+}
+{% endhighlight %}
+
+Here I have used asText() method which will get all the text content from the webpage without any html tag and stored it in string object. When you are printing the string you will get the following result.
+
+# Result:
+
+-->PIC
 
 Jekyll also offers powerful support for code snippets:
 
