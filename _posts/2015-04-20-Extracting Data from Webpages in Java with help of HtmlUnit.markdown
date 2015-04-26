@@ -8,7 +8,7 @@ The World Wide Web (WWW) is an information system which inter-connects hypertext
 
 Internet plays major role in communication. It is the primary data source for almost 90% of applications and it has about `672 Exabytes (672,000,000,000 Gigabytes)` of accessible data. Following picture shows the data generated per second in internet.
 
---> PIC
+![Alt text](/images/stats.jpg "Internet Statistics")
 
 While it is amply clear that enormous data is created on the internet, there is no standard structure being followed in webpages, each one has its own structure so getting data into our application is always a herculean task.
 
@@ -39,11 +39,13 @@ HtmlUnit is an API for java which can simulate a browser. Using this API with ja
 
 #### Step 1:
 Create a new java project in eclipse
---> PIC
+
+![Alt text](/images/createProject.jpg "Create Project")
 
 #### Step 2:
 Download the HtmlUnit API from [HtmlUnit's Source](https://sourceforge.net/projects/htmlunit/files/htmlunit) and add the HtmlUnit jar files into project’s build path
--- PIC
+
+![Alt text](/images/importJARS.jpg "Import JAR Files")
 
 #### Step 3:
 Create a java class, Here for example I have created `googleRes` class
@@ -89,7 +91,7 @@ Because in the background the javascript will be executed and if it has some int
 	webClient.getOptions().setJavaScriptEnabled(false);
 {% endhighlight %}
 
-* Getting page contents: HtmlPage class offers two unique methods called asText() & asXml() by which you can get the page’s text content without tag or with tag respectively.
+* __Getting page contents:__ HtmlPage class offers two unique methods called asText() & asXml() by which you can get the page’s text content without tag or with tag respectively.
 
 {% highlight java %}
 public class googleRes{
@@ -107,22 +109,61 @@ Here I have used asText() method which will get all the text content from the we
 
 # Result:
 
--->PIC
+![Alt text](/images/output1.jpg "Result")
 
 __Sample Program to find no.of results for list of programming languages:__
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
+{% highlight java %}
+
+public class googleRes {
+	public static void main(String[] args) throws FailingHttpStatusCodeException, MalformedURLException, IOException {
+		
+		#=> Initailzing Webclient Object to imitate chrome browser
+		WebClient webClient = new WebClient(BrowserVersion.CHROME);
+		webClient.getOptions().setJavaScriptEnabled(false);
+		webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+		webClient.getOptions().setThrowExceptionOnScriptError(false);
+		
+		#=> List of programming language names to find no.of results
+		String []searchString={"java","javastring","php","c++","c#","visual basic","clojure","simula","ruby","python",
+				"objective-c","matlab"};
+		HtmlPage page = webClient.getPage("https://google.com/");
+	    
+		#=> Getting Form from google home page. tsf is the form name 
+		HtmlForm form = page.getHtmlElementById("tsf");
+		
+		#=> Iterate programming languages to fond no.of results
+		for(int j=0;j<searchString.length;j++){
+			
+			#=> Setting programming language name as value in search box in google search home page
+			form.getInputByName("q").setValueAttribute(searchString[j]);
+			
+			#=> Creating a virtual submit button
+			HtmlButton submitButton = (HtmlButton)page.createElement("button");
+			submitButton.setAttribute("type", "submit");
+			form.appendChild(submitButton);
+			
+			#=> Submitting the form and getting the result 
+			HtmlPage newPage = submitButton.click();
+			
+			#=> Getting the result as text
+			String pageText=newPage.asText();
+			String results[]=pageText.split("\n");
+			
+			#=> Getting the lines which contains the no.of results value.
+			for(int i=0;i<results.length;i++){
+				if(results[i].contains("About") && results[i].contains("results"))
+					System.out.println(searchString[j]+"-----"+results[i]);
+			}
+		}
+	}
+}
 {% endhighlight %}
 
 
 __Result__
 
--->PIC
+![Alt text](/images/output2.jpg "Result")
 
 Note—Based on the program result chart has been created using excel.
 
