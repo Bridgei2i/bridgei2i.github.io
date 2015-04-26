@@ -38,15 +38,18 @@ HtmlUnit is an API for java which can simulate a browser. Using this API with ja
 # How To Guide:
 
 ### Step 1:
+
 	* Create a new java project in eclipse
 --> PIC
 
 ### Step 2:
+
 	* Download the HtmlUnit API from [HtmlUnit's Source](https://sourceforge.net/projects/htmlunit/files/htmlunit)  
 	* Add the HtmlUnit jar files into project’s build path
 -- PIC
 
 ### Step 3:
+
 	* Create a java class, Here for example I have created `googleRes` class
 {% highlight java %}
 public class googleRes{
@@ -127,9 +130,6 @@ __Result__
 
 Note—Based on the program result chart has been created using excel.
 
-__This blog is written by Saddam Hussain, Business Analyst at__ [BRIDGEi2i] 
+__This blog is written by Saddam Hussain, Business Analyst at__ [BRIDGEi2i](https://www.bridgei2i.com)
 
-__About BRIDGEi2i:__ [BRIDGEi2i] provides Business Analytics Solutions to enterprises globally, enabling them to achieve accelerated business impact harnessing the power of data. Our analytics services and technology solutions enable business managers to consume more meaningful information from big data, generate actionable insights from complex business problems and make data driven decisions across pan-enterprise processes to create sustainable business impact. To know more visit [www.bridgei2i.com]
-
-[BRIDGEi2i]:      https://www.bridgei2i.com
-[www.bridgei2i.com]: https://www.bridgei2i.com
+__About BRIDGEi2i:__ [BRIDGEi2i](https://www.bridgei2i.com) provides Business Analytics Solutions to enterprises globally, enabling them to achieve accelerated business impact harnessing the power of data. Our analytics services and technology solutions enable business managers to consume more meaningful information from big data, generate actionable insights from complex business problems and make data driven decisions across pan-enterprise processes to create sustainable business impact. To know more visit [www.bridgei2i.com](https://www.bridgei2i.com)
