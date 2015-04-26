@@ -16,24 +16,24 @@ Secondly, while working on market intelligence projects, supplementing predictiv
 
 But as we all know, secondary research involves sifting and collating data across competitors and across multiple webpages and presenting information in an analysis-ready form. Given that data is stored in thousands of webpages a manual copy-paste effort wouldn’t be a prudent investment of time. So to get the data, we have to dynamically iterate and extract data from those webpages.
 
-Fortunately there is an API which allows us to dynamically process the webpages in java. In this blog I have explained about how to get (grab) data from websites in java with HtmlUnit API.
+Fortunately there is an `API` which allows us to `dynamically process` the webpages in java. In this blog I have explained about how to get (grab) data from websites in java with HtmlUnit API.
 
-HtmlUnit:
-            HtmlUnit is an API for java which can simulate a browser. Using this API with java program one can invoke pages, fill out forms, click links, this will work just like a normal browser. HtmlUnit offers the following features
+# HtmlUnit:
+HtmlUnit is an API for java which can simulate a browser. Using this API with java program one can invoke pages, fill out forms, click links, this will work just like a normal browser. HtmlUnit offers the following features
 
-Support for the HTTP and HTTPS protocols
-Support for cookies
-Ability to specify whether failing responses from the server should throw exceptions or should be returned as pages of the appropriate type (based on content type)
-Support for submit methods POST and GET (as well as HEAD, DELETE)
-Ability to customize the request headers being sent to the server
-Support for HTML responses
-Wrapper for HTML pages that provides easy access to all information contained inside them
-Support for submitting forms
-Support for clicking links
-Support for walking the DOM model of the HTML document
-Proxy server support
-Support for basic and NTLM authentication
-Excellent JavaScript support
+..* Support for the HTTP and HTTPS protocols
+..* Support for cookies
+..* Ability to specify whether failing responses from the server should throw exceptions or should be returned as pages of the appropriate type (based on content type)
+..* Support for submit methods POST and GET (as well as HEAD, DELETE)
+..* Ability to customize the request headers being sent to the server
+..* Support for HTML responses
+..* Wrapper for HTML pages that provides easy access to all information contained inside them
+..* Support for submitting forms
+..* Support for clicking links
+..* Support for walking the DOM model of the HTML document
+..* Proxy server support
+..* Support for basic and NTLM authentication
+..* Excellent JavaScript support
 
 
 
