@@ -37,20 +37,16 @@ HtmlUnit is an API for java which can simulate a browser. Using this API with ja
 
 # How To Guide:
 
-### Step 1:
-
-	* Create a new java project in eclipse
+#### Step 1:
+Create a new java project in eclipse
 --> PIC
 
-### Step 2:
-
-	* Download the HtmlUnit API from [HtmlUnit's Source](https://sourceforge.net/projects/htmlunit/files/htmlunit)  
-	* Add the HtmlUnit jar files into project’s build path
+#### Step 2:
+Download the HtmlUnit API from [HtmlUnit's Source](https://sourceforge.net/projects/htmlunit/files/htmlunit) and add the HtmlUnit jar files into project’s build path
 -- PIC
 
-### Step 3:
-
-	* Create a java class, Here for example I have created `googleRes` class
+#### Step 3:
+Create a java class, Here for example I have created `googleRes` class
 {% highlight java %}
 public class googleRes{
 	public static void main(String []args){
