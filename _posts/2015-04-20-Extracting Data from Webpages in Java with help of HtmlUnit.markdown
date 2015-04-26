@@ -21,19 +21,19 @@ Fortunately there is an `API` which allows us to `dynamically process` the webpa
 # HtmlUnit:
 HtmlUnit is an API for java which can simulate a browser. Using this API with java program one can invoke pages, fill out forms, click links, this will work just like a normal browser. HtmlUnit offers the following features
 
-..* Support for the HTTP and HTTPS protocols
-..* Support for cookies
-..* Ability to specify whether failing responses from the server should throw exceptions or should be returned as pages of the appropriate type (based on content type)
-..* Support for submit methods POST and GET (as well as HEAD, DELETE)
-..* Ability to customize the request headers being sent to the server
-..* Support for HTML responses
-..* Wrapper for HTML pages that provides easy access to all information contained inside them
-..* Support for submitting forms
-..* Support for clicking links
-..* Support for walking the DOM model of the HTML document
-..* Proxy server support
-..* Support for basic and NTLM authentication
-..* Excellent JavaScript support
+* Support for the HTTP and HTTPS protocols
+* Support for cookies
+* Ability to specify whether failing responses from the server should throw exceptions or should be returned as pages of the appropriate type (based on content type)
+* Support for submit methods POST and GET (as well as HEAD, DELETE)
+* Ability to customize the request headers being sent to the server
+* Support for HTML responses
+* Wrapper for HTML pages that provides easy access to all information contained inside them
+* Support for submitting forms
+* Support for clicking links
+* Support for walking the DOM model of the HTML document
+* Proxy server support
+* Support for basic and NTLM authentication
+* Excellent JavaScript support
 
 
 
