@@ -8,7 +8,7 @@ The World Wide Web (WWW) is an information system which inter-connects hypertext
 
 Internet plays major role in communication. It is the primary data source for almost 90% of applications and it has about `672 Exabytes (672,000,000,000 Gigabytes)` of accessible data. Following picture shows the data generated per second in internet.
 
-![alt text]("https://bridgei2i.github.io//common/Raw/images/2015-04-20-Extracting Data from Webpages in Java with help of HtmlUnit" "Logo Title Text 1")
+--> PIC
 
 While it is amply clear that enormous data is created on the internet, there is no standard structure being followed in webpages, each one has its own structure so getting data into our application is always a herculean task.
 
@@ -35,22 +35,22 @@ HtmlUnit is an API for java which can simulate a browser. Using this API with ja
 * Support for basic and NTLM authentication
 * Excellent JavaScript support
 
-# __How To Guide:__
+# How To Guide:
 
-## Step 1:
+__Step 1:__
 * Create a new java project in eclipse
 --> PIC
 
-## Step 2:
+__Step 2:__
 * Download the HtmlUnit API from [HtmlUnit's Source](https://sourceforge.net/projects/htmlunit/files/htmlunit)  
 * Add the HtmlUnit jar files into project’s build path
 -- PIC
 
-## Step 3:
-* Create a java class, Here for example I have created ‘googleRes’ class
+__Step 3:__
+* Create a java class, Here for example I have created `googleRes` class
 {% highlight java %}
 public class googleRes{
-	pubilc static void main(String []args){
+	public static void main(String []args){
 	
 	}
 }
@@ -110,7 +110,7 @@ Here I have used asText() method which will get all the text content from the we
 
 -->PIC
 
-Jekyll also offers powerful support for code snippets:
+__Sample Program to find no.of results for list of programming languages:__
 
 {% highlight ruby %}
 def print_hi(name)
@@ -120,8 +120,14 @@ print_hi('Tom')
 #=> prints 'Hi, Tom' to STDOUT.
 {% endhighlight %}
 
-Check out the [Jekyll docs][jekyll] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll’s dedicated Help repository][jekyll-help].
 
-[jekyll]:      http://jekyllrb.com
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-help]: https://github.com/jekyll/jekyll-help
+__Result__
+
+-->PIC
+
+Note—Based on the program result chart has been created using excel
+__This blog is written by Saddam Hussain, Business Analyst at__ [BRIDGEi2i] 
+
+__About BRIDGEi2i:__ [BRIDGEi2i] provides Business Analytics Solutions to enterprises globally, enabling them to achieve accelerated business impact harnessing the power of data. Our analytics services and technology solutions enable business managers to consume more meaningful information from big data, generate actionable insights from complex business problems and make data driven decisions across pan-enterprise processes to create sustainable business impact. To know more visit www.bridgei2i.com
+
+[BRIDGEi2i]:      www.bridgei2i.com
