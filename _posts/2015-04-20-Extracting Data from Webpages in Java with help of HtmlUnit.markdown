@@ -37,16 +37,16 @@ HtmlUnit is an API for java which can simulate a browser. Using this API with ja
 
 # How To Guide:
 
-__Step 1:__
+### Step 1:
 	* Create a new java project in eclipse
 --> PIC
 
-__Step 2:__
+### Step 2:
 	* Download the HtmlUnit API from [HtmlUnit's Source](https://sourceforge.net/projects/htmlunit/files/htmlunit)  
 	* Add the HtmlUnit jar files into project’s build path
 -- PIC
 
-__Step 3:__
+### Step 3:
 	* Create a java class, Here for example I have created `googleRes` class
 {% highlight java %}
 public class googleRes{
@@ -131,5 +131,5 @@ __This blog is written by Saddam Hussain, Business Analyst at__ [BRIDGEi2i]
 
 __About BRIDGEi2i:__ [BRIDGEi2i] provides Business Analytics Solutions to enterprises globally, enabling them to achieve accelerated business impact harnessing the power of data. Our analytics services and technology solutions enable business managers to consume more meaningful information from big data, generate actionable insights from complex business problems and make data driven decisions across pan-enterprise processes to create sustainable business impact. To know more visit [www.bridgei2i.com]
 
-[BRIDGEi2i]:      www.bridgei2i.com
-[www.bridgei2i.com]: www.bridgei2i.com
+[BRIDGEi2i]:      https://www.bridgei2i.com
+[www.bridgei2i.com]: https://www.bridgei2i.com
