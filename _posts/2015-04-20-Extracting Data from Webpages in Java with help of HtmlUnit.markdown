@@ -8,7 +8,7 @@ The World Wide Web (WWW) is an information system which inter-connects hypertext
 
 Internet plays major role in communication. It is the primary data source for almost 90% of applications and it has about `672 Exabytes (672,000,000,000 Gigabytes)` of accessible data. Following picture shows the data generated per second in internet.
 
--->> PICTURE
+![alt text]("https://bridgei2i.github.io//common/Raw/images/2015-04-20-Extracting Data from Webpages in Java with help of HtmlUnit" "Logo Title Text 1")
 
 While it is amply clear that enormous data is created on the internet, there is no standard structure being followed in webpages, each one has its own structure so getting data into our application is always a herculean task.
 
