@@ -175,4 +175,3 @@ _Note—Based on the program result chart has been created using excel._
 
 __This blog is written by Saddam Hussain, Business Analyst at__ [BRIDGEi2i](https://www.bridgei2i.com)
 
-__About BRIDGEi2i:__ [BRIDGEi2i](https://www.bridgei2i.com) provides Business Analytics Solutions to enterprises globally, enabling them to achieve accelerated business impact harnessing the power of data. Our analytics services and technology solutions enable business managers to consume more meaningful information from big data, generate actionable insights from complex business problems and make data driven decisions across pan-enterprise processes to create sustainable business impact. To know more visit [www.bridgei2i.com](https://www.bridgei2i.com)
