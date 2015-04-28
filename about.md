@@ -1,11 +1,7 @@
 ---
 layout: page
-title: About
+title: About BRIDGEi2i
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
-
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+[BRIDGEi2i](https://www.bridgei2i.com) provides Business Analytics Solutions to enterprises globally, enabling them to achieve accelerated business impact harnessing the power of data. Our analytics services and technology solutions enable business managers to consume more meaningful information from big data, generate actionable insights from complex business problems and make data driven decisions across pan-enterprise processes to create sustainable business impact. To know more visit [www.bridgei2i.com](https://www.bridgei2i.com)

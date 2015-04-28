@@ -173,4 +173,4 @@ __Result__
 
 _Note—Based on the program result chart has been created using excel._
 
-__This blog is written by Saddam Hussain, Business Analyst at__ [BRIDGEi2i](https://www.bridgei2i.com)
+__This blog is written by [Saddam Hussain](https://www.linkedin.com/pub/saddam-hussain/74/b39/853), Business Analyst at__ [BRIDGEi2i](https://www.bridgei2i.com)
