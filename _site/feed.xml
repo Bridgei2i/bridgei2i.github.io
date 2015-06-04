@@ -1,60 +1,341 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Bridgei2i Technical blog</title>
-    <description>This is the Bridgei2i technical blog, where we share our learning and experiences about technology in the analytics field.
+    <title>BRIDGEi2i Technical blog</title>
+    <description>This is the BRIDGEi2i technical blog, where we share our learning and experiences about technology in the analytics field.
 </description>
     <link>http://yourdomain.com/</link>
     <atom:link href="http://yourdomain.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 24 Apr 2015 17:26:04 +0530</pubDate>
-    <lastBuildDate>Fri, 24 Apr 2015 17:26:04 +0530</lastBuildDate>
+    <pubDate>Thu, 04 Jun 2015 16:09:56 +0530</pubDate>
+    <lastBuildDate>Thu, 04 Jun 2015 16:09:56 +0530</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
-        <title>Welcome to Jekyll!</title>
-        <description>&lt;p&gt;You’ll find this post in your &lt;code&gt;_posts&lt;/code&gt; directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run &lt;code&gt;jekyll serve&lt;/code&gt;, which launches a web server and auto-regenerates your site when a file is updated.&lt;/p&gt;
+        <title>Using Word2Vec from Clojure</title>
+        <description>&lt;p&gt;For classifying or clustering data in the context of a machine learning problem, the first step is to create a representation of data, usually called the &lt;a href=&quot;http://en.wikipedia.org/wiki/Feature_vector&quot;&gt;Feature Vector&lt;/a&gt;. Datasets consisting of images or audio files have feature vectors that are already in numeric form. If we have text data, we have to convert words /characters into numbers.&lt;/p&gt;
 
-&lt;p&gt;To add new posts, simply add a file in the &lt;code&gt;_posts&lt;/code&gt; directory that follows the convention &lt;code&gt;YYYY-MM-DD-name-of-post.ext&lt;/code&gt; and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.&lt;/p&gt;
+&lt;p&gt;For a number of years, the &lt;a href=&quot;http://en.wikipedia.org/wiki/Bag-of-words_model&quot;&gt;Bag of words&lt;/a&gt; approach was used to create a Feature Vector. This approach required the use of a dictionary which contains all the words used in the dataset.&lt;/p&gt;
 
-&lt;p&gt;Jekyll also offers powerful support for code snippets:&lt;/p&gt;
+&lt;p&gt;Assume that we have a dictionary consisting of the words {“the”, “sleepy”,”happy”,”cat”,”dog”}. If we encounter 2 sentences :”the sleepy cat” and “the happy dog”, we replace the words with the index in the dictionary. Thus “the sleepy cat” becomes “0,1,3”, and “the happy dog” translates to “0,2,5” .&lt;/p&gt;
 
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Tom&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &amp;#39;Hi, Tom&amp;#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The problem with this approach is that it ignores similarities between words. For example, ‘Cricket’, ‘Batsman’ &amp;amp; ‘Bowler’ are related terms from the game of Cricket, but the use of Bag of words gives each of the words a different number which doesn’t convey that they are related.&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://github.com/jekyll/jekyll-help&quot;&gt;Jekyll’s dedicated Help repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Word2Vec is a tool developed by &lt;a href=&quot;http://code.google.com/p/word2vec/&quot;&gt;Mikolov et al&lt;/a&gt; which is capable of generating feature vectors from text data, and these feature vectors encode relationships that words share with each other. When given a (word’s) feature vector, we can find words that are similar to the given word by using a distance function.&lt;/p&gt;
 
+&lt;p&gt;Multiple implementations of Word2Vec are available, and in this post we introduce a Clojure wrapper to a &lt;a href=&quot;https://github.com/medallia/Word2VecJava&quot;&gt;Java implementation&lt;/a&gt; of Word2vec. The source and the documentation are available at &lt;a href=&quot;https://github.com/Bridgei2i/clojure-word2vec&quot;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h1 id=&quot;introduction-to-clojure-word2vec&quot;&gt;Introduction to clojure-word2vec&lt;/h1&gt;
+
+&lt;p&gt;We’ll use a dataset (consists of forum postings on Apple products) to try out the capabilities of Word2vec.  We read the Apple dataset and train a Word2vec model on the data. This is a modified version of the Apple dataset, which can be downloaded &lt;a href=&quot;http://times.cs.uiuc.edu/~wang296/Data/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We read in the dataset using the &lt;code&gt;read-filtered-dataset&lt;/code&gt; function and then train it on word2vec.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(def appvec
+  (-&amp;gt; (read-filtered-dataset &quot;resources/apple-data.txt.gz&quot;) word2vec))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let’s view the top 20 words in the vocabulary.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(take 20 (.getVocab appvec))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;(&quot;ipod&quot; &quot;drive&quot; &quot;problem&quot; &quot;computer&quot; &quot;itune&quot; &quot;apple&quot; &quot;disc&quot; 
+&quot;nano&quot; &quot;song&quot; &quot;thank&quot; &quot;mac&quot; &quot;os&quot; &quot;screen&quot; &quot;card&quot; &quot;time&quot; 
+&quot;system&quot; &quot;music&quot; &quot;g5&quot; &quot;display&quot; &quot;file&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We can see from the words that the common terms were either Apple products or related to them.&lt;/p&gt;
+
+&lt;p&gt;The total number of words  in the vocabulary&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(.getVocabSize (.toThrift appvec))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    6813
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Given that Word2vec transforms a word into a high dimension vector, we can compute the similarity of 2 words by comparing the corresponding word vectors using a distance metric like &lt;a href=&quot;http://en.wikipedia.org/wiki/Cosine_similarity&quot;&gt;cosine similarity&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;To calculate the distance between 2 words, &lt;em&gt;g5&lt;/em&gt; and &lt;em&gt;ipod&lt;/em&gt;, we fetch the raw word vectors and compute distance using the &lt;a href=&quot;http://Incanter.org&quot;&gt;Incanter&lt;/a&gt; cosine-similarity API.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(defn cosine-sim
+  [model word1 word2]
+  (let [rawvecfn  #(.getRawVector (.forSearch model) %)
+
+(cosine-sim appvec &quot;g5&quot; &quot;ipod&quot;)
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The resulting score is a value between 0 and 1, where a high score indicates that the words lie close to each other in the vector space model.&lt;br /&gt;
+&lt;code&gt;
+0.9988300697889931
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;some-examples-of-the-relations-api&quot;&gt;Some examples of the relations API:&lt;/h2&gt;
+&lt;p&gt;In the original paper, the example offered was: “if Paris is related to France, Berlin is related to ?” and the query would find Germany as the answer.&lt;/p&gt;
+
+&lt;p&gt;In the Apple dataset (as with any other dataset), the relationship found are usually noisy. Lets look at some good answers&lt;/p&gt;
+
+&lt;p&gt;If Nano is a ‘kind of’ ipod, (The Ipod Nano was a bestselling model of the Ipod line) then &lt;a href=&quot;http://en.wikipedia.org/wiki/Power_Macintosh_G3_%28Blue_%26_White%29&quot;&gt;g3&lt;/a&gt; is a&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(get-relations appvec &quot;nano&quot; &quot;ipod&quot;  &quot;g3&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    (&quot;mac&quot; &quot;imac&quot; &quot;ibook&quot; &quot;installation&quot; &quot;system&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If ghz is a measure of speed, then gb is a measure of&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(get-relations appvec &quot;ghz&quot; &quot;speed&quot; &quot;gb&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    (&quot;data&quot; &quot;hd&quot; &quot;backup&quot; &quot;size&quot; &quot;cache&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We’d expect &lt;em&gt;memory&lt;/em&gt; to be the right answer, but &lt;em&gt;data&lt;/em&gt;, the 1st item on the list, is a reasonable approximation.&lt;/p&gt;
+
+&lt;p&gt;If 300gb is the measure of a drive, then 2ghz is a&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(get-relations appvec &quot;300gb&quot; &quot;drive&quot; &quot;2ghz&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    (&quot;imac&quot; &quot;system&quot; &quot;processor&quot; &quot;upgrade&quot; &quot;model&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;measure of a processor (3nd item)&lt;/p&gt;
+
+&lt;p&gt;Airport is a product line for wifi basestations, and Extreme is one of the products in that line, (a wifi base station made by apple) what’s a model in the ipod line?&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(get-relations appvec &quot;airport&quot; &quot;extreme&quot; &quot;ipod&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    (&quot;nano&quot; &quot;content&quot; &quot;library&quot; &quot;music&quot; &quot;shuffle&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;em&gt;nano&lt;/em&gt; (1nd item)&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;There’s a lot of noise in the answers however.  When we query for a &lt;a href=&quot;http://en.wikipedia.org/wiki/Power_Mac_G5&quot;&gt;G5&lt;/a&gt; instead (a desktop computer)&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(get-relations appvec &quot;nano&quot; &quot;ipod&quot;  &quot;g5&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    (&quot;speed&quot; &quot;raid&quot; &quot;quad&quot; &quot;model&quot; &quot;performance&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We don’t find a desktop in the top 5 answers.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;We can use the &lt;em&gt;get-matches&lt;/em&gt; API to return the words that are closest (by euclidean distance) to the queried word.  Here are a few examples&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Radeon&lt;/em&gt; is a video card&lt;br /&gt;
+&lt;code&gt;clojure
+(get-matches appvec &quot;radeon&quot;)
+&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;
+    (&quot;card&quot; &quot;ati&quot; &quot;dual&quot; &quot;g5&quot; &quot;agp&quot; &quot;nvidia&quot; &quot;ghz&quot; &quot;graphic&quot; &quot;pcie&quot; &quot;model&quot;)
+&lt;/code&gt;&lt;br /&gt;
+The top few answers suggest that it is a card, and the manufacturer is ATI.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(get-matches appvec &quot;seagate&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    (&quot;maxtor&quot; &quot;gb&quot; &quot;raid&quot; &quot;drive&quot; &quot;quad&quot; &quot;speed&quot; &quot;raptor&quot; &quot;performance&quot; &quot;digital&quot; &quot;enclosure&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-clojure&quot;&gt;(get-matches appvec &quot;nano&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;    (&quot;ipod&quot; &quot;gen&quot; &quot;track&quot; &quot;music&quot; &quot;shuffle&quot; &quot;content&quot; &quot;itune&quot; &quot;library&quot; &quot;play&quot; &quot;ipods&quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;## Conclusion&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Word2vec is an excellent tool to find co-occurances of words in a corpus. Depending on the kind of data, it may be possible to determine relationships as well.&lt;/li&gt;
+  &lt;li&gt;We used the Apple dataset as it has content that was annotated with Part of Speech tags (such as nouns, verbs). For this exercise, we only used words that were nouns or were part of noun phrases.&lt;/li&gt;
+  &lt;li&gt;Word2vec can tell us what is being discussed &lt;em&gt;about&lt;/em&gt; something. We can see from the relations API that customers talking about Seagate (A hard disk manufacturer) are concerned about sizes, speed, performance and enclosures.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;This blog is written by &lt;a href=&quot;https://in.linkedin.com/in/karkerakiran&quot;&gt;Kiran Karkera&lt;/a&gt;, Lead Data Scientist at&lt;/strong&gt; &lt;a href=&quot;https://www.bridgei2i.com&quot;&gt;BRIDGEi2i&lt;/a&gt;&lt;/p&gt;
 </description>
-        <pubDate>Fri, 24 Apr 2015 22:23:31 +0530</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2015/04/24/welcome-to-jekyll.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2015/04/24/welcome-to-jekyll.html</guid>
+        <pubDate>Thu, 04 Jun 2015 22:23:31 +0530</pubDate>
+        <link>http://yourdomain.com/clojure/word2vec/2015/06/04/word2vec.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/clojure/word2vec/2015/06/04/word2vec.html</guid>
         
         
-        <category>jekyll</category>
+        <category>clojure</category>
         
-        <category>update</category>
+        <category>word2vec</category>
         
       </item>
     
       <item>
-        <title>First post using Jekyll</title>
-        <description>
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-clojure&quot; data-lang=&quot;clojure&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;def &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;hello&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;hello&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;prints&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;&amp;#39;Hi&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;Tom&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;#39;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+        <title>Extracting Data from Webpages in Java with help of HtmlUnit</title>
+        <description>&lt;p&gt;The World Wide Web (WWW) is an information system which inter-connects hypertext documents which is usually called as webpages and can be accessed through the internet. The webpage may contain any kind of data from text to multimedia. As per &lt;code&gt;worldwidewebsize.com&lt;/code&gt; the web contains about &lt;code&gt;4.56 million&lt;/code&gt; indexed web pages.&lt;/p&gt;
 
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/jekyll/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;. If you have questions, you can ask them on &lt;a href=&quot;https://github.com/jekyll/jekyll-help&quot;&gt;Jekyll’s dedicated Help repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Internet plays major role in communication. It is the primary data source for almost 90% of applications and it has about &lt;code&gt;672 Exabytes (672,000,000,000 Gigabytes)&lt;/code&gt; of accessible data. Following picture shows the data generated per second in internet.&lt;/p&gt;
 
+&lt;p&gt;&lt;img src=&quot;/images/2015-04-20_Extracting_Data_HtmlUnit/stats.jpg&quot; alt=&quot;Alt text&quot; title=&quot;Internet Statistics&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;While it is amply clear that enormous data is created on the internet, there is no standard structure being followed in webpages, each one has its own structure so getting data into our application is always a herculean task.&lt;/p&gt;
+
+&lt;p&gt;Secondly, while working on market intelligence projects, supplementing predictive analytics models and/or segmentation models with secondary research data on competitor’s market share offers a significant client impact.&lt;/p&gt;
+
+&lt;p&gt;But as we all know, secondary research involves sifting and collating data across competitors and across multiple webpages and presenting information in an analysis-ready form. Given that data is stored in thousands of webpages a manual copy-paste effort wouldn’t be a prudent investment of time. So to get the data, we have to dynamically iterate and extract data from those webpages.&lt;/p&gt;
+
+&lt;p&gt;Fortunately there is an &lt;code&gt;API&lt;/code&gt; which allows us to &lt;code&gt;dynamically process&lt;/code&gt; the webpages in java. In this blog I have explained about how to get (grab) data from websites in java with HtmlUnit API.&lt;/p&gt;
+
+&lt;h1 id=&quot;htmlunit&quot;&gt;HtmlUnit:&lt;/h1&gt;
+&lt;p&gt;HtmlUnit is an API for java which can simulate a browser. Using this API with java program one can invoke pages, fill out forms, click links, this will work just like a normal browser. HtmlUnit offers the following features&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Support for the HTTP and HTTPS protocols&lt;/li&gt;
+  &lt;li&gt;Support for cookies&lt;/li&gt;
+  &lt;li&gt;Ability to specify whether failing responses from the server should throw exceptions or should be returned as pages of the appropriate type (based on content type)&lt;/li&gt;
+  &lt;li&gt;Support for submit methods POST and GET (as well as HEAD, DELETE)&lt;/li&gt;
+  &lt;li&gt;Ability to customize the request headers being sent to the server&lt;/li&gt;
+  &lt;li&gt;Support for HTML responses&lt;/li&gt;
+  &lt;li&gt;Wrapper for HTML pages that provides easy access to all information contained inside them&lt;/li&gt;
+  &lt;li&gt;Support for submitting forms&lt;/li&gt;
+  &lt;li&gt;Support for clicking links&lt;/li&gt;
+  &lt;li&gt;Support for walking the DOM model of the HTML document&lt;/li&gt;
+  &lt;li&gt;Proxy server support&lt;/li&gt;
+  &lt;li&gt;Support for basic and NTLM authentication&lt;/li&gt;
+  &lt;li&gt;Excellent JavaScript support&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;how-to-guide&quot;&gt;How To Guide:&lt;/h1&gt;
+
+&lt;h4 id=&quot;step-1&quot;&gt;Step 1:&lt;/h4&gt;
+&lt;p&gt;Create a new java project in eclipse&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2015-04-20_Extracting_Data_HtmlUnit/createProject.jpg&quot; alt=&quot;Alt text&quot; title=&quot;Create Project&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;step-2&quot;&gt;Step 2:&lt;/h4&gt;
+&lt;p&gt;Download the HtmlUnit API from &lt;a href=&quot;https://sourceforge.net/projects/htmlunit/files/htmlunit&quot;&gt;HtmlUnit’s Source&lt;/a&gt; and add the HtmlUnit jar files into project’s build path&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2015-04-20_Extracting_Data_HtmlUnit/importJARS.jpg&quot; alt=&quot;Alt text&quot; title=&quot;Import JAR Files&quot; /&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;step-3&quot;&gt;Step 3:&lt;/h4&gt;
+&lt;p&gt;Create a java class, Here for example I have created &lt;code&gt;googleRes&lt;/code&gt; class&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;googleRes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+ &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+
+ &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Create and initialize an object for WebClient:&lt;/strong&gt; WebClient is root for HtmlUnit which is used to imitate a client browser. It has a parameterised and non-parameterised constructor. Here I have used single parameter constructor to create a new object by passing &lt;code&gt;BrowserVersion.CHROME&lt;/code&gt; constant as an argument. By which a new WebClient object has been created to imitate a chrome browser.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;googleRes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+ &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FailingHttpStatusCodeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
+					&lt;span class=&quot;n&quot;&gt;MalformedURLException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserVersion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;CHROME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+
+ &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Create object for page:&lt;/strong&gt; The WebClient class contains a method called getPage() which is used to fetch a webpage, Return type of getPage() method is HtmlPage. So create an object for HtmlPage and assign it by calling &lt;code&gt;webClient.getPage()&lt;/code&gt;.The getPage() method requires one argument which is the URL of the webpage you want to fetch.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;googleRes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+ &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FailingHttpStatusCodeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
+					&lt;span class=&quot;n&quot;&gt;MalformedURLException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserVersion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;CHROME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;HtmlPage&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HtmlPage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://en.wikipedia.org&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;HtmlPage object has been created which contains all the data stored in the webpage which you send as URL argument for getPage() method. Now you can play with the HtmlPage object and you can get whatever content your want from the webpage.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Handling the JavaScript&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Nowadays all website contains javascript in it. Which is used to process or call background function when some event occurs or to show some dynamic advertisement in the page. So if you don’t have to do anything with the javascript then it’s better to turn it off.&lt;/p&gt;
+
+&lt;p&gt;Because in the background the javascript will be executed and if it has some internal function call again that will be executed and this process will keep on going which will reduce the performance of your program and will take lot of time to fetch the websites. The WebClient class offers methods to solve this issue by which you can enable/disable the javascript in the webpage.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setJavaScriptEnabled&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Getting page contents:&lt;/strong&gt; HtmlPage class offers two unique methods called asText() &amp;amp; asXml() by which you can get the page’s text content without tag or with tag respectively.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;googleRes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+ &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FailingHttpStatusCodeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+					 &lt;span class=&quot;n&quot;&gt;MalformedURLException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserVersion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;CHROME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setJavaScriptEnabled&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;HtmlPage&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HtmlPage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://en.wikipedia.org&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pageContent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;asText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pageContent&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here I have used asText() method which will get all the text content from the webpage without any html tag and stored it in string object. When you are printing the string you will get the following result.&lt;/p&gt;
+
+&lt;h1 id=&quot;result&quot;&gt;Result:&lt;/h1&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2015-04-20_Extracting_Data_HtmlUnit/output1.jpg&quot; alt=&quot;Alt text&quot; title=&quot;Result&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Sample Program to find no.of results for list of programming languages:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-java&quot; data-lang=&quot;java&quot;&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;googleRes&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+ &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;throws&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FailingHttpStatusCodeException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; 
+					&lt;span class=&quot;n&quot;&gt;MalformedURLException&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IOException&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+	
+	&lt;span class=&quot;c1&quot;&gt;// Initailzing Webclient Object to imitate chrome browser&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;WebClient&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;WebClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserVersion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;CHROME&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setJavaScriptEnabled&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setThrowExceptionOnFailingStatusCode&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getOptions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setThrowExceptionOnScriptError&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	
+	&lt;span class=&quot;c1&quot;&gt;// List of programming language names to find no.of results&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;searchString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;java&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;javastring&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;php&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;c++&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;c#&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+				&lt;span class=&quot;s&quot;&gt;&amp;quot;visual basic&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;clojure&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;simula&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;ruby&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;
+					&lt;span class=&quot;s&quot;&gt;&amp;quot;python&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;objective-c&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;matlab&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;};&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;HtmlPage&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webClient&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getPage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;https://google.com/&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    
+	&lt;span class=&quot;c1&quot;&gt;// Getting Form from google home page. tsf is the form name &lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;HtmlForm&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;form&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getHtmlElementById&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;tsf&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	
+	&lt;span class=&quot;c1&quot;&gt;// Iterate programming languages to fond no.of results&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;searchString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
+		
+	  &lt;span class=&quot;cm&quot;&gt;/* Setting programming language name as value in &lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;	  		search box in google search home page */&lt;/span&gt;
+	  &lt;span class=&quot;n&quot;&gt;form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getInputByName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;q&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setValueAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;searchString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+	
+   	  &lt;span class=&quot;c1&quot;&gt;// Creating a virtual submit button&lt;/span&gt;
+	  &lt;span class=&quot;n&quot;&gt;HtmlButton&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;submitButton&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HtmlButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;createElement&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;button&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	  &lt;span class=&quot;n&quot;&gt;submitButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setAttribute&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;type&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;submit&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	  &lt;span class=&quot;n&quot;&gt;form&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;appendChild&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;submitButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	
+	  &lt;span class=&quot;c1&quot;&gt;// Submitting the form and getting the result &lt;/span&gt;
+	  &lt;span class=&quot;n&quot;&gt;HtmlPage&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;newPage&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;submitButton&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;click&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+	
+	  &lt;span class=&quot;c1&quot;&gt;// Getting the result as text&lt;/span&gt;
+	  &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pageText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;newPage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;asText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+	  &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pageText&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+	
+	  &lt;span class=&quot;c1&quot;&gt;// Getting the lines which contains the no.of results value.&lt;/span&gt;
+	  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++){&lt;/span&gt;
+	     &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;contains&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;About&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;contains&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;results&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+		 &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;searchString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]+&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;-----&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;results&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]);&lt;/span&gt;
+	  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+ &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Result&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/2015-04-20_Extracting_Data_HtmlUnit/output2.jpg&quot; alt=&quot;Alt text&quot; title=&quot;Result&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note—Based on the program result chart has been created using excel.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;This blog is written by &lt;a href=&quot;https://www.linkedin.com/pub/saddam-hussain/74/b39/853&quot;&gt;Saddam Hussain&lt;/a&gt;, Business Analyst at&lt;/strong&gt; &lt;a href=&quot;https://www.bridgei2i.com&quot;&gt;BRIDGEi2i&lt;/a&gt;&lt;/p&gt;
 </description>
-        <pubDate>Fri, 24 Apr 2015 22:23:31 +0530</pubDate>
-        <link>http://yourdomain.com/jekyll/update/2015/04/24/test-post.html</link>
-        <guid isPermaLink="true">http://yourdomain.com/jekyll/update/2015/04/24/test-post.html</guid>
+        <pubDate>Mon, 20 Apr 2015 22:23:31 +0530</pubDate>
+        <link>http://yourdomain.com/java/crawler/2015/04/20/Extracting%20Data%20from%20Webpages%20in%20Java%20with%20help%20of%20HtmlUnit.html</link>
+        <guid isPermaLink="true">http://yourdomain.com/java/crawler/2015/04/20/Extracting%20Data%20from%20Webpages%20in%20Java%20with%20help%20of%20HtmlUnit.html</guid>
         
         
-        <category>jekyll</category>
+        <category>java</category>
         
-        <category>update</category>
+        <category>crawler</category>
         
       </item>
     
