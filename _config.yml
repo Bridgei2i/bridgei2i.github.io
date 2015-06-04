@@ -11,3 +11,5 @@ github_username:  bridgei2i
 
 # Build settings
 markdown: kramdown
+kramdown:
+  input: GFM
