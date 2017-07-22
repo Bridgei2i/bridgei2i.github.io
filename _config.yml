@@ -1,9 +1,8 @@
 # Site settings
-title: BRIDGEi2i Technical blog
+title: Bi2i Technical blog
 email: technologyteam@bridgei2i.com
 description: > # this means to ignore newlines until "baseurl:"
-  This is the BRIDGEi2i technical blog, where we share our learning and experiences
-  about technology in the analytics field.
+  The place where we share our learning and experiences about technology in the analytics field.
 baseurl: "" # the subpath of your site, e.g. /blog/
 url: "http://yourdomain.com" # the base hostname & protocol for your site
 twitter_username: bridgei2i
