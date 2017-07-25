@@ -1,2 +1,2 @@
 # bridgei2i.github.io
-The Bridgei2i technical blog
+Bridgei2i Tech Blog
